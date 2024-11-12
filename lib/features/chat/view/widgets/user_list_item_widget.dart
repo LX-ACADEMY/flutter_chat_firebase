@@ -1,3 +1,5 @@
+import 'package:chat_app/features/chat/view/pages/chat_room_page.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 class UserListItemWidget extends StatelessWidget {
@@ -5,13 +7,19 @@ class UserListItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ListTile(
-      title: Text('User Name'),
-      subtitle: Text('Last Message'),
-      leading: CircleAvatar(
+    /// Callback to execute when the user tap on the list item.
+    void onListItemTap() {
+      context.push(ChatRoomPage.routePath);
+    }
+
+    return ListTile(
+      onTap: onListItemTap,
+      title: const Text('User Name'),
+      subtitle: const Text('Last Message'),
+      leading: const CircleAvatar(
         child: Text('U'),
       ),
-      trailing: Column(
+      trailing: const Column(
         children: [
           CircleAvatar(
             backgroundColor: Colors.green,
