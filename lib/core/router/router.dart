@@ -1,3 +1,4 @@
+import 'package:chat_app/features/auth/services/auth_services.dart';
 import 'package:chat_app/features/auth/view/pages/login_page.dart';
 import 'package:chat_app/features/auth/view/pages/signup_page.dart';
 import 'package:chat_app/features/chat/view/pages/chat_room_page.dart';
@@ -20,6 +21,15 @@ final router = GoRouter(
     GoRoute(
       path: LoginPage.routePath,
       builder: (context, state) => const LoginPage(),
+      redirect: (context, state) {
+        final user = AuthServices.getCurrentUserSync();
+
+        if (user != null) {
+          return UsersListPage.routePath;
+        }
+
+        return null;
+      },
     ),
     GoRoute(
       path: SignupPage.routePath,
