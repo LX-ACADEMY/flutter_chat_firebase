@@ -1,14 +1,30 @@
 import 'package:chat_app/features/chat/view/widgets/chat_room_bottom_bar_widget.dart';
 import 'package:chat_app/features/chat/view/widgets/message_list_item_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-class ChatRoomPage extends StatelessWidget {
+class ChatRoomPage extends HookWidget {
   static const routePath = '/chat/room';
 
   const ChatRoomPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    /// Controller used for the message list view
+    final messagesScrollController = useScrollController();
+
+    /// Scroll to the end of the list when page loads
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        messagesScrollController
+            .jumpTo(messagesScrollController.position.maxScrollExtent);
+      });
+
+      return null;
+    }, []);
+
+    const totalMessages = 100;
+
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -40,12 +56,28 @@ class ChatRoomPage extends StatelessWidget {
                 color: Colors.grey[200],
               ),
               child: ListView.separated(
-                itemCount: 100,
+                controller: messagesScrollController,
+                itemCount: totalMessages,
                 separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
-                  return MessageListItemWidget(
-                    isSentMessage: index % 2 == 0,
-                    message: 'Message',
+                  final EdgeInsets padding;
+
+                  if (index == 0) {
+                    padding = const EdgeInsets.only(
+                      top: 16,
+                    );
+                  } else if (index == totalMessages - 1) {
+                    padding = const EdgeInsets.only(bottom: 16);
+                  } else {
+                    padding = EdgeInsets.zero;
+                  }
+
+                  return Padding(
+                    padding: padding,
+                    child: MessageListItemWidget(
+                      isSentMessage: index % 2 == 0,
+                      message: 'Message',
+                    ),
                   );
                 },
               ),
