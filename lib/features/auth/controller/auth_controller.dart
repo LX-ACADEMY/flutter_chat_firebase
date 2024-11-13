@@ -121,4 +121,14 @@ class AuthController extends _$AuthController {
   Stream<List<UserModel>> getUserStream() {
     return AuthDbServices.getUserStream();
   }
+
+  User? getCurrentUser() {
+    try {
+      return AuthServices.getCurrentUserSync();
+    } catch (e) {
+      SnackBarUtils.showMessage('Canot get current user');
+    }
+
+    return null;
+  }
 }

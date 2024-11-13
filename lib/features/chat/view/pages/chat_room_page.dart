@@ -86,7 +86,9 @@ class ChatRoomPage extends HookWidget {
               ),
             ),
           ),
-          const ChatRoomBottomBarWidget(),
+          ChatRoomBottomBarWidget(
+            user: user,
+          ),
         ],
       ),
     );

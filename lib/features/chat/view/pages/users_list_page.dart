@@ -1,4 +1,5 @@
 import 'package:chat_app/features/auth/controller/auth_controller.dart';
+import 'package:chat_app/features/auth/models/user_model.dart';
 import 'package:chat_app/features/chat/view/widgets/user_list_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,11 +40,18 @@ class UsersListPage extends ConsumerWidget {
             );
           }
 
+          final currentUser =
+              ref.read(authControllerProvider.notifier).getCurrentUser();
+
+          final allUsers = snapshot.data as List<UserModel>;
+          final filteredUsers =
+              allUsers.where((user) => user.id != currentUser!.uid).toList();
+
           return ListView.builder(
-            itemCount: snapshot.data!.length,
+            itemCount: filteredUsers.length,
             itemBuilder: (context, index) {
               return UserListItemWidget(
-                user: snapshot.data![index],
+                user: filteredUsers[index],
               );
             },
           );
