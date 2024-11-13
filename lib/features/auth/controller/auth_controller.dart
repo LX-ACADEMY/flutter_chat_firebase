@@ -1,4 +1,6 @@
 import 'package:chat_app/core/utils/snackbar_utils.dart';
+import 'package:chat_app/features/auth/models/user_model.dart';
+import 'package:chat_app/features/auth/services/auth_db_services.dart';
 import 'package:chat_app/features/auth/services/auth_services.dart';
 import 'package:chat_app/features/auth/view/pages/login_page.dart';
 import 'package:chat_app/features/chat/view/pages/users_list_page.dart';
@@ -20,6 +22,14 @@ class AuthController extends _$AuthController {
         App.navigatorKey.currentContext!.go(UsersListPage.routePath);
       }
     });
+  }
+
+  String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Name is required';
+    }
+
+    return null;
   }
 
   String? validateEmail(String? value) {
@@ -61,9 +71,26 @@ class AuthController extends _$AuthController {
     return null;
   }
 
-  Future<void> signup(String email, String password) async {
+  Future<void> signup({
+    required String email,
+    required String password,
+    required String name,
+  }) async {
     try {
-      await AuthServices.signup(email, password);
+      await AuthServices.signup(
+        email: email,
+        password: password,
+        name: name,
+      );
+
+      final userDetails = AuthServices.getCurrentUserSync();
+      final user = UserModel(
+        id: userDetails!.uid,
+        name: name,
+        email: email,
+      );
+
+      await AuthDbServices.createUser(user);
 
       SnackBarUtils.showMessage('Signup success');
     } catch (e) {

@@ -13,6 +13,7 @@ class SignupPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final emailController = useTextEditingController();
+    final nameController = useTextEditingController();
     final passwordController = useTextEditingController();
 
     final formKey = useMemoized(() => GlobalKey<FormState>());
@@ -26,8 +27,9 @@ class SignupPage extends HookConsumerWidget {
     void onSignupButtonClicked() {
       if (formKey.currentState!.validate()) {
         ref.read(authControllerProvider.notifier).signup(
-              emailController.text,
-              passwordController.text,
+              email: emailController.text,
+              password: passwordController.text,
+              name: nameController.text,
             );
       }
     }
@@ -44,6 +46,14 @@ class SignupPage extends HookConsumerWidget {
               children: [
                 const Text('Signup'),
                 const SizedBox(height: 20),
+                TextFormField(
+                  validator:
+                      ref.read(authControllerProvider.notifier).validateName,
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    hintText: 'Name',
+                  ),
+                ),
                 TextFormField(
                   validator:
                       ref.read(authControllerProvider.notifier).validateEmail,
