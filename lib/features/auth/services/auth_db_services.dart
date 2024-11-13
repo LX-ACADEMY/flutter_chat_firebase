@@ -12,4 +12,12 @@ class AuthDbServices {
   static Future<void> createUser(UserModel user) async {
     await userCollection.doc(user.id).set(user);
   }
+
+  static Stream<List<UserModel>> getUserStream() {
+    final userStream = userCollection.snapshots();
+
+    final usersListStream = userStream
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+    return usersListStream;
+  }
 }

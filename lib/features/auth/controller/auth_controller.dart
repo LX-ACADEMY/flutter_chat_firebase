@@ -117,4 +117,8 @@ class AuthController extends _$AuthController {
       SnackBarUtils.showMessage(e.toString());
     }
   }
+
+  Stream<List<UserModel>> getUserStream() {
+    return AuthDbServices.getUserStream();
+  }
 }

@@ -1,23 +1,29 @@
+import 'package:chat_app/features/auth/models/user_model.dart';
 import 'package:chat_app/features/chat/view/pages/chat_room_page.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 class UserListItemWidget extends StatelessWidget {
-  const UserListItemWidget({super.key});
+  final UserModel user;
+
+  const UserListItemWidget({
+    super.key,
+    required this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
     /// Callback to execute when the user tap on the list item.
     void onListItemTap() {
-      context.push(ChatRoomPage.routePath);
+      context.push(ChatRoomPage.routePath, extra: user);
     }
 
     return ListTile(
       onTap: onListItemTap,
-      title: const Text('User Name'),
+      title: Text(user.name),
       subtitle: const Text('Last Message'),
-      leading: const CircleAvatar(
-        child: Text('U'),
+      leading: CircleAvatar(
+        child: Text(user.name[0].toUpperCase()),
       ),
       trailing: const Column(
         children: [

@@ -1,3 +1,4 @@
+import 'package:chat_app/features/auth/models/user_model.dart';
 import 'package:chat_app/features/chat/view/widgets/chat_room_bottom_bar_widget.dart';
 import 'package:chat_app/features/chat/view/widgets/message_list_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class ChatRoomPage extends HookWidget {
   static const routePath = '/chat/room';
 
-  const ChatRoomPage({super.key});
+  final UserModel user;
+
+  const ChatRoomPage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +30,17 @@ class ChatRoomPage extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Row(
+        title: Row(
           children: [
             CircleAvatar(
-              child: Text('U'),
+              child: Text(user.name[0].toUpperCase()),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('User Name'),
-                Text(
+                Text(user.name),
+                const Text(
                   'Last seen',
                   style: TextStyle(
                     fontSize: 12,

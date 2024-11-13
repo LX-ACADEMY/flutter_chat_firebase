@@ -1,3 +1,4 @@
+import 'package:chat_app/features/auth/models/user_model.dart';
 import 'package:chat_app/features/auth/services/auth_services.dart';
 import 'package:chat_app/features/auth/view/pages/login_page.dart';
 import 'package:chat_app/features/auth/view/pages/signup_page.dart';
@@ -16,7 +17,9 @@ final router = GoRouter(
     ),
     GoRoute(
       path: ChatRoomPage.routePath,
-      builder: (context, state) => const ChatRoomPage(),
+      builder: (context, state) => ChatRoomPage(
+        user: state.extra as UserModel,
+      ),
     ),
     GoRoute(
       path: LoginPage.routePath,

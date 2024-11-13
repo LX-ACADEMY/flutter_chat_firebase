@@ -24,9 +24,29 @@ class UsersListPage extends ConsumerWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          return const UserListItemWidget();
+      body: StreamBuilder(
+        stream: ref.read(authControllerProvider.notifier).getUserStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('An error occurred'),
+            );
+          }
+
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              return UserListItemWidget(
+                user: snapshot.data![index],
+              );
+            },
+          );
         },
       ),
     );
