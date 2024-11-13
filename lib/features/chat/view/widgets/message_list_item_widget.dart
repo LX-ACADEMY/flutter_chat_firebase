@@ -1,8 +1,10 @@
+import 'package:chat_app/features/chat/models/message_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MessageListItemWidget extends StatelessWidget {
   final bool isSentMessage;
-  final String message;
+  final MessageModel message;
 
   const MessageListItemWidget({
     super.key,
@@ -25,12 +27,12 @@ class MessageListItemWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(message),
-            const Align(
+            Text(message.message),
+            Align(
               alignment: Alignment.centerRight,
               child: Text(
-                '19:00',
-                style: TextStyle(fontSize: 12),
+                DateFormat.jm().format(message.createdAt),
+                style: const TextStyle(fontSize: 12),
               ),
             )
           ],

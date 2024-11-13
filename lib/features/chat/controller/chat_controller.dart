@@ -38,4 +38,8 @@ class ChatController extends _$ChatController {
       SnackBarUtils.showMessage('Cannot send message');
     }
   }
+
+  Stream<List<MessageModel>> getMessagesStream(String receiverId) {
+    return ChatDbServices.getMessagesStream(receiverId);
+  }
 }
