@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:chat_app/core/utils/snackbar_utils.dart';
 import 'package:chat_app/features/auth/models/user_model.dart';
 import 'package:chat_app/features/auth/services/auth_db_services.dart';
@@ -102,7 +103,14 @@ class AuthController extends _$AuthController {
     try {
       await AuthServices.logout();
 
-      SnackBarUtils.showMessage('Logout success');
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 1,
+          channelKey: 'auth_channel',
+          title: 'Logout',
+          body: 'You have been logged out',
+        ),
+      );
     } catch (e) {
       SnackBarUtils.showMessage(e.toString());
     }

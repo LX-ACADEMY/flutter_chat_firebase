@@ -13,6 +13,53 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'auth_channel',
+        channelName: 'Authentication Notifications',
+        channelDescription: 'Authentication related notifications',
+        groupKey: 'auth_group',
+      ),
+      NotificationChannel(
+        channelKey: 'chat_channel',
+        channelName: 'Chat Notifications',
+        channelDescription: 'Chat related notifications',
+        groupKey: 'chat_group',
+      ),
+      NotificationChannel(
+        channelKey: 'auth_channel_silent',
+        channelName: 'Authentication Notifications',
+        channelDescription: 'Authentication related notifications',
+        groupKey: 'auth_group',
+        playSound: false,
+      ),
+      NotificationChannel(
+        channelKey: 'chat_channel_silent',
+        channelName: 'Chat Notifications',
+        channelDescription: 'Chat related notifications',
+        groupKey: 'chat_group',
+        playSound: false,
+      ),
+      NotificationChannel(
+        channelKey: 'sample',
+        channelName: 'Sample',
+        channelDescription: 'Sample Channel',
+      )
+    ],
+    channelGroups: [
+      NotificationChannelGroup(
+        channelGroupKey: 'auth_group',
+        channelGroupName: 'Authentication Notifications',
+      ),
+      NotificationChannelGroup(
+        channelGroupKey: 'chat_group',
+        channelGroupName: 'Chat Notifications',
+      )
+    ],
+  );
+
   runApp(const ProviderScope(child: App()));
 }
 
