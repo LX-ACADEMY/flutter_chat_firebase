@@ -1,7 +1,9 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:chat_app/core/notification/notification_controller.dart';
 import 'package:chat_app/core/router/router.dart';
 import 'package:chat_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -60,6 +62,18 @@ void main() async {
     ],
   );
 
+  /// Foreground notification handling
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 10,
+        channelKey: 'chat_channel',
+        title: message.notification?.title,
+        body: message.notification?.body,
+      ),
+    );
+  });
+
   runApp(const ProviderScope(child: App()));
 }
 
@@ -78,6 +92,19 @@ class App extends HookWidget {
           AwesomeNotifications().requestPermissionToSendNotifications();
         }
       });
+
+      return null;
+    }, []);
+
+    useEffect(() {
+      AwesomeNotifications().setListeners(
+          onActionReceivedMethod: NotificationController.onActionReceivedMethod,
+          onNotificationCreatedMethod:
+              NotificationController.onNotificationCreatedMethod,
+          onNotificationDisplayedMethod:
+              NotificationController.onNotificationDisplayedMethod,
+          onDismissActionReceivedMethod:
+              NotificationController.onDismissActionReceivedMethod);
 
       return null;
     }, []);

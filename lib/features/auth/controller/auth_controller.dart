@@ -4,9 +4,11 @@ import 'package:chat_app/features/auth/models/user_model.dart';
 import 'package:chat_app/features/auth/services/auth_db_services.dart';
 import 'package:chat_app/features/auth/services/auth_services.dart';
 import 'package:chat_app/features/auth/view/pages/login_page.dart';
+import 'package:chat_app/features/auth/view/pages/signup_page.dart';
 import 'package:chat_app/features/chat/view/pages/users_list_page.dart';
 import 'package:chat_app/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
 
@@ -89,6 +91,7 @@ class AuthController extends _$AuthController {
         id: userDetails!.uid,
         name: name,
         email: email,
+        deviceToken: (await FirebaseMessaging.instance.getToken()) ?? '',
       );
 
       await AuthDbServices.createUser(user);
@@ -109,6 +112,9 @@ class AuthController extends _$AuthController {
           channelKey: 'auth_channel',
           title: 'Logout',
           body: 'You have been logged out',
+          payload: {
+            'route': SignupPage.routePath,
+          },
         ),
       );
     } catch (e) {
@@ -138,5 +144,18 @@ class AuthController extends _$AuthController {
     }
 
     return null;
+  }
+
+  Future<void> updateDeviceToken(String deviceToken) async {
+    try {
+      final currentUser = getCurrentUser();
+
+      await AuthDbServices.updateDeviceToken(
+        userId: currentUser!.uid,
+        deviceToken: deviceToken,
+      );
+    } catch (e) {
+      SnackBarUtils.showMessage(e.toString());
+    }
   }
 }

@@ -20,4 +20,13 @@ class AuthDbServices {
         .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
     return usersListStream;
   }
+
+  static Future<void> updateDeviceToken({
+    required String userId,
+    required String deviceToken,
+  }) async {
+    await userCollection.doc(userId).update({
+      'deviceToken': deviceToken,
+    });
+  }
 }
