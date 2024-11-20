@@ -64,12 +64,17 @@ void main() async {
 
   /// Foreground notification handling
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    final payload = message.data;
+
+    final title = payload['title'];
+    final body = payload['body'];
+
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: 10,
         channelKey: 'chat_channel',
-        title: message.notification?.title,
-        body: message.notification?.body,
+        title: title,
+        body: body,
       ),
     );
   });
