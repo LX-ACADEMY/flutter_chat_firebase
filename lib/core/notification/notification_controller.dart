@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:chat_app/main.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:go_router/go_router.dart';
 
@@ -38,12 +39,27 @@ class NotificationController {
     // Your code goes here
   }
 
-  @pragma('vm:entry-point')
-  Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    // If you're going to use other Firebase services in the background, such as Firestore,
-    // make sure you call `initializeApp` before using other Firebase services.
-    // await Firebase.initializeApp();
+  static Future<void> processPushNotification(RemoteMessage message) async {
+    final payload = message.data;
 
-    print("Handling a background message: ${message.messageId}");
+    final title = payload['title'];
+    final body = payload['body'];
+
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 10,
+        channelKey: 'chat_channel',
+        title: title,
+        body: body,
+      ),
+    );
+  }
+
+  @pragma('vm:entry-point')
+  static Future<void> firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    await Firebase.initializeApp();
+
+    processPushNotification(message);
   }
 }

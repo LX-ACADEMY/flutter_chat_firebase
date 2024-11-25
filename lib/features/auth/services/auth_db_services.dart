@@ -29,4 +29,9 @@ class AuthDbServices {
       'deviceToken': deviceToken,
     });
   }
+
+  static Future<UserModel> getUserById(String userId) async {
+    final user = await userCollection.doc(userId).get();
+    return user.data()!;
+  }
 }

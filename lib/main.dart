@@ -63,21 +63,12 @@ void main() async {
   );
 
   /// Foreground notification handling
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    final payload = message.data;
+  FirebaseMessaging.onMessage
+      .listen(NotificationController.processPushNotification);
 
-    final title = payload['title'];
-    final body = payload['body'];
-
-    AwesomeNotifications().createNotification(
-      content: NotificationContent(
-        id: 10,
-        channelKey: 'chat_channel',
-        title: title,
-        body: body,
-      ),
-    );
-  });
+  /// Background notification handling
+  FirebaseMessaging.onBackgroundMessage(
+      NotificationController.firebaseMessagingBackgroundHandler);
 
   runApp(const ProviderScope(child: App()));
 }
